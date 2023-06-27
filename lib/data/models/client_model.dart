@@ -7,21 +7,21 @@ class Client {
 
   Map<String, dynamic> toMap() {
     return {
-      'clientId': this.clientID,
-      'userId': this.userId,
-      'clientName': this.clientName,
-      'clientMail': this.clientMail,
-      'clientAddress': this.clientAddress,
+      'client_id': this.clientID,
+      'user_id': this.userId,
+      'client_name': this.clientName,
+      'client_mail': this.clientMail,
+      'client_address': this.clientAddress,
     };
   }
 
   factory Client.fromMap(Map<String, dynamic> map) {
     return Client(
-      clientID: map['clientId'] as int,
-      userId: map['userId'] as int,
-      clientName: map['clientName'] as String,
-      clientMail: map['clientMail'] as String,
-      clientAddress: map['clientAddress'] as String,
+      clientID: map['client_id'] as int,
+      userId: map['user_id'] as int,
+      clientName: map['client_name'] as String,
+      clientMail: map['client_mail'] as String,
+      clientAddress: map['client_address'] as String,
     );
   }
 

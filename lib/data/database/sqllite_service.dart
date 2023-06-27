@@ -3,7 +3,7 @@ import 'package:sqflite/sqflite.dart' as sql;
 
 class DatabaseHelper {
   static Future<void> createTables(sql.Database database) async {
-    await database.execute("""CREATE TABLE users(
+    await database.execute("""CREATE TABLE user(
         user_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
         total_earnings REAL NOT NULL,
         total_active_projects INTEGER NOT NULL,
@@ -11,18 +11,47 @@ class DatabaseHelper {
         total_active_projects INTEGER NOT NULL
       )
       """);
-    await database.execute("""CREATE TABLE items(
-        id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-        title TEXT,
-        description TEXT,
-        createdAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+    await database.execute("""CREATE TABLE client(
+        client_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+        user_id INTEGER NOT NULL,
+        client_name TEXT NOT NULL,
+        client_mail TEXT,
+        client_address TEXT,
+        FOREIGN KEY (user_id) REFERENCES user (user_id) ON DELETE CASCADE ON UPDATE NO ACTION,
       )
       """);
-    await database.execute("""CREATE TABLE items(
-        id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-        title TEXT,
-        description TEXT,
-        createdAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+    await database.execute("""CREATE TABLE project(
+        project_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+        client_id INTEGER NOT NULL,
+        project_name TEXT NOT NULL,
+        project_description TEXT,
+        project_salary REAL,
+        time_started TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        time_ended TIMESTAMP,
+        time_total REAL,
+        salary_total REAL,
+        FOREIGN KEY (client_id) REFERENCES client (client_id) ON DELETE CASCADE ON UPDATE NO ACTION,
+      )
+      """);
+    await database.execute("""CREATE TABLE task(
+        task_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+        project_id INTEGER NOT NULL,
+        task_name TEXT NOT NULL,
+        task_description TEXT,
+        time_started TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        time_ended TIMESTAMP,
+        time_total REAL,
+        FOREIGN KEY (project_id) REFERENCES project (project_id) ON DELETE CASCADE ON UPDATE NO ACTION,
+      )
+      """);
+    await database.execute("""CREATE TABLE session(
+        session_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+        task_id INTEGER NOT NULL,
+        session_description TEXT,
+        time_started TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        time_ended TIMESTAMP,
+        time_paused REAL,
+        FOREIGN KEY (task_id) REFERENCES task (task_id) ON DELETE CASCADE ON UPDATE NO ACTION,
       )
       """);
   }

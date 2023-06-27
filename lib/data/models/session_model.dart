@@ -17,23 +17,23 @@ class Session {
 
   Map<String, dynamic> toMap() {
     return {
-      'sessionID': this.sessionID,
-      'taskID': this.taskID,
-      'timeStarted': this.timeStarted,
-      'timeEnded': this.timeEnded,
-      'description': this.description,
-      'timePaused': this.timePaused,
+      'session_id': this.sessionID,
+      'task_id': this.taskID,
+      'time_started': this.timeStarted,
+      'time_ended': this.timeEnded,
+      'session_description': this.description,
+      'time_paused': this.timePaused,
     };
   }
 
   factory Session.fromMap(Map<String, dynamic> map) {
     return Session(
-      sessionID: map['sessionID'] as int,
-      taskID: map['taskID'] as int,
-      timeStarted: map['timeStarted'] as String,
-      timeEnded: map['timeEnded'] as String,
-      description: map['description'] as String,
-      timePaused: map['timePaused'] as double,
+      sessionID: map['session_id'] as int,
+      taskID: map['task_id'] as int,
+      timeStarted: map['time_started'] as String,
+      timeEnded: map['time_ended'] as String,
+      description: map['session_description'] as String,
+      timePaused: map['time_paused'] as double,
     );
   }
 }

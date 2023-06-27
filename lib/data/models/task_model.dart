@@ -19,25 +19,25 @@ class Task {
 
   Map<String, dynamic> toMap() {
     return {
-      'taskID': this.taskID,
-      'projectID': this.projectID,
-      'taskName': this.taskName,
-      'taskDescription': this.taskDescription,
+      'task_id': this.taskID,
+      'project_id': this.projectID,
+      'task_name': this.taskName,
+      'task_description': this.taskDescription,
       'timeTotal': this.timeTotal,
-      'timeStarted': this.timeStarted,
+      'time_started': this.timeStarted,
       'timeEnded': this.timeEnded,
     };
   }
 
   factory Task.fromMap(Map<String, dynamic> map) {
     return Task(
-      taskID: map['taskID'] as int,
-      projectID: map['projectID'] as int,
-      taskName: map['taskName'] as String,
-      taskDescription: map['taskDescription'] as String,
-      timeTotal: map['timeTotal'] as double,
-      timeStarted: map['timeStarted'] as String,
-      timeEnded: map['timeEnded'] as String,
+      taskID: map['task_id'] as int,
+      projectID: map['project_id'] as int,
+      taskName: map['task_name'] as String,
+      taskDescription: map['task_description'] as String,
+      timeTotal: map['time_total'] as double,
+      timeStarted: map['time_started'] as String,
+      timeEnded: map['time_ended'] as String,
     );
   }
 }
