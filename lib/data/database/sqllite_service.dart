@@ -3,6 +3,21 @@ import 'package:sqflite/sqflite.dart' as sql;
 
 class DatabaseHelper {
   static Future<void> createTables(sql.Database database) async {
+    await database.execute("""CREATE TABLE users(
+        user_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+        total_earnings REAL NOT NULL,
+        total_active_projects INTEGER NOT NULL,
+        total_active_earnings REAL NOT NULL,
+        total_active_projects INTEGER NOT NULL
+      )
+      """);
+    await database.execute("""CREATE TABLE items(
+        id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+        title TEXT,
+        description TEXT,
+        createdAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+      )
+      """);
     await database.execute("""CREATE TABLE items(
         id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
         title TEXT,
