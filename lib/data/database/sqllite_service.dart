@@ -1,5 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:sqflite/sqflite.dart' as sql;
+import 'package:work_logger/data/models/user_model.dart';
+import 'package:path/path.dart' as path;
+import 'package:flutter/widgets.dart';
 
 class DatabaseHelper {
   static Future<void> createTables(sql.Database database) async {
@@ -8,7 +11,6 @@ class DatabaseHelper {
         total_earnings REAL NOT NULL,
         total_active_projects INTEGER NOT NULL,
         total_active_earnings REAL NOT NULL,
-        total_active_projects INTEGER NOT NULL
       )
       """);
     await database.execute("""CREATE TABLE client(
@@ -56,62 +58,49 @@ class DatabaseHelper {
       """);
   }
 
-  static Future<sql.Database> db() async {
-    return sql.openDatabase(
-      'work-logger.db',
-      version: 1,
-      onCreate: (sql.Database database, int version) async {
-        await createTables(database);
-      },
+  final database = sql.openDatabase(
+    'work-logger.db',
+    version: 1,
+    onCreate: (sql.Database database, int version) async {
+      await createTables(database);
+    },
+  );
+
+  //! USER related database operations
+  // Adding new user
+  Future<void> insertDog(Global user) async {
+    final db = await database;
+
+    await db.insert(
+      'user',
+      user.toMap(),
     );
   }
 
-  // Create new item
-  static Future<int> createItem(String? title, String? descrption) async {
-    final db = await DatabaseHelper.db();
+  // Retrieve user from database
+  Future<List<Global>> getUser() async {
+    final db = await database;
 
-    final data = {'title': title, 'description': descrption};
-    final id = await db.insert('items', data,
-        conflictAlgorithm: sql.ConflictAlgorithm.replace);
-    return id;
+    final List<Map<String, dynamic>> users = await db.query('user', limit: 1);
+
+    List<Global> user = [];
+
+    users.forEach((element) {
+      user.add(Global.fromMap(element));
+    });
+
+    return user;
   }
 
-  // Read all items
-  static Future<List<Map<String, dynamic>>> getItems() async {
-    final db = await DatabaseHelper.db();
-    return db.query('items', orderBy: "id");
-  }
+  // Update user
+  Future<void> updateUser(Global user) async {
+    final db = await database;
 
-  // Get a single item by id
-  //We dont use this method, it is for you if you want it.
-  static Future<List<Map<String, dynamic>>> getItem(int id) async {
-    final db = await DatabaseHelper.db();
-    return db.query('items', where: "id = ?", whereArgs: [id], limit: 1);
-  }
-
-  // Update an item by id
-  static Future<int> updateItem(
-      int id, String title, String? descrption) async {
-    final db = await DatabaseHelper.db();
-
-    final data = {
-      'title': title,
-      'description': descrption,
-      'createdAt': DateTime.now().toString()
-    };
-
-    final result =
-    await db.update('items', data, where: "id = ?", whereArgs: [id]);
-    return result;
-  }
-
-  // Delete
-  static Future<void> deleteItem(int id) async {
-    final db = await DatabaseHelper.db();
-    try {
-      await db.delete("items", where: "id = ?", whereArgs: [id]);
-    } catch (err) {
-      debugPrint("Something went wrong when deleting an item: $err");
-    }
+    await db.update(
+      'user',
+      user.toMap(),
+      where: 'id = ?',
+      whereArgs: [user.userID],
+    );
   }
 }
